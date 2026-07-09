@@ -1,0 +1,43 @@
+Jul 1 08:01:00 web01 sshd[5506]: Accepted password for jsmith from 10.0.0.5 port 48024 ssh2
+Jul 1 08:47:00 web01 sshd[2679]: Accepted password for agarcia from 10.0.0.12 port 57870 ssh2
+Jul 1 09:02:00 web01 sshd[1488]: Accepted password for mchen from 10.0.0.31 port 43070 ssh2
+Jul 1 08:32:00 web01 sshd[1434]: Accepted password for rpatel from 192.168.1.44 port 58390 ssh2
+Jul 1 09:14:00 web01 sshd[8359]: Accepted password for kbrown from 172.16.0.9 port 59309 ssh2
+Jul 2 08:48:00 web01 sshd[3615]: Accepted password for jsmith from 10.0.0.5 port 53848 ssh2
+Jul 2 09:09:00 web01 sshd[4527]: Accepted password for agarcia from 10.0.0.12 port 51029 ssh2
+Jul 2 08:24:00 web01 sshd[2584]: Accepted password for mchen from 10.0.0.31 port 51763 ssh2
+Jul 2 09:51:00 web01 sshd[1711]: Accepted password for rpatel from 192.168.1.44 port 55054 ssh2
+Jul 2 09:05:00 web01 sshd[5803]: Accepted password for kbrown from 172.16.0.9 port 51850 ssh2
+Jul 3 08:02:00 web01 sshd[4733]: Accepted password for jsmith from 10.0.0.5 port 49482 ssh2
+Jul 3 08:55:00 web01 sshd[2654]: Accepted password for agarcia from 10.0.0.12 port 52455 ssh2
+Jul 3 09:40:00 web01 sshd[6977]: Accepted password for mchen from 10.0.0.31 port 45329 ssh2
+Jul 3 09:13:00 web01 sshd[5374]: Accepted password for rpatel from 192.168.1.44 port 42339 ssh2
+Jul 3 08:10:00 web01 sshd[8573]: Accepted password for kbrown from 172.16.0.9 port 52433 ssh2
+Jul 4 08:43:00 web01 sshd[6313]: Accepted password for jsmith from 10.0.0.5 port 41832 ssh2
+Jul 4 08:51:00 web01 sshd[6168]: Accepted password for agarcia from 10.0.0.12 port 53145 ssh2
+Jul 4 08:13:00 web01 sshd[6155]: Accepted password for mchen from 10.0.0.31 port 46967 ssh2
+Jul 4 09:56:00 web01 sshd[8517]: Accepted password for rpatel from 192.168.1.44 port 44681 ssh2
+Jul 4 08:15:00 web01 sshd[9830]: Accepted password for kbrown from 172.16.0.9 port 48609 ssh2
+Jul 5 09:23:00 web01 sshd[4593]: Accepted password for jsmith from 10.0.0.5 port 44532 ssh2
+Jul 5 08:48:00 web01 sshd[1771]: Accepted password for agarcia from 10.0.0.12 port 43592 ssh2
+Jul 5 08:50:00 web01 sshd[7916]: Accepted password for mchen from 10.0.0.31 port 59543 ssh2
+Jul 5 09:24:00 web01 sshd[8668]: Accepted password for rpatel from 192.168.1.44 port 57338 ssh2
+Jul 5 08:43:00 web01 sshd[2876]: Accepted password for kbrown from 172.16.0.9 port 57595 ssh2
+Jul 1 03:10:00 web01 sshd[2000]: Failed password for invalid user admin from 203.0.113.55 port 50000 ssh2
+Jul 1 03:10:25 web01 sshd[2001]: Failed password for invalid user admin from 203.0.113.55 port 50001 ssh2
+Jul 1 03:10:50 web01 sshd[2002]: Failed password for invalid user admin from 203.0.113.55 port 50002 ssh2
+Jul 1 03:11:15 web01 sshd[2003]: Failed password for invalid user admin from 203.0.113.55 port 50003 ssh2
+Jul 1 03:11:40 web01 sshd[2004]: Failed password for invalid user admin from 203.0.113.55 port 50004 ssh2
+Jul 1 03:12:05 web01 sshd[2005]: Failed password for invalid user admin from 203.0.113.55 port 50005 ssh2
+Jul 1 03:12:30 web01 sshd[2006]: Failed password for invalid user admin from 203.0.113.55 port 50006 ssh2
+Jul 1 03:12:55 web01 sshd[2007]: Failed password for invalid user admin from 203.0.113.55 port 50007 ssh2
+Jul 1 14:07:00 web01 sshd[3100]: Accepted password for jsmith from 198.51.100.23 port 55321 ssh2
+Jul 1 10:15:00 web01 sudo: agarcia : TTY=pts/0 ; PWD=/home/agarcia ; USER=root ; COMMAND=/bin/bash
+Jul 1 10:17:00 web01 sudo: agarcia : TTY=pts/0 ; PWD=/etc ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow
+Jul 3 03:46:00 web01 sshd[4200]: Accepted password for mchen from 10.0.0.31 port 51122 ssh2
+Jul 1 20:00:00 web01 sshd[5000]: Failed password for rpatel from 103.21.244.101 port 52000 ssh2
+Jul 1 20:04:00 web01 sshd[5001]: Failed password for rpatel from 103.21.244.101 port 52001 ssh2
+Jul 1 20:08:00 web01 sshd[5002]: Failed password for rpatel from 103.21.244.101 port 52002 ssh2
+Jul 1 20:12:00 web01 sshd[5003]: Failed password for rpatel from 103.21.244.101 port 52003 ssh2
+Jul 1 20:16:00 web01 sshd[5004]: Failed password for rpatel from 103.21.244.101 port 52004 ssh2
+Jul 1 20:20:00 web01 sshd[5005]: Failed password for rpatel from 103.21.244.101 port 52005 ssh2

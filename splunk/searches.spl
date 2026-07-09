@@ -1,0 +1,58 @@
+# ============================================================================
+# Sample SPL (Search Processing Language) queries for the SIEM index
+# Import these as saved searches / alerts in Splunk, or run ad-hoc in Search.
+# Assumes events were forwarded via scripts/send_to_splunk.py (index=siem).
+# ============================================================================
+
+# --- 1. Brute-force login attempts by source IP, last 24h ---
+index=siem sourcetype=siem:windows_auth OR sourcetype=siem:linux_ssh event_type=login_failure
+| bucket _time span=5m
+| stats count by src_ip, _time
+| where count >= 5
+| sort -count
+
+# --- 2. Top 10 attacking IPs across all sources ---
+index=siem (event_type=login_failure OR event_type=conn_denied OR event_type=http_suspicious_request)
+| stats count as attempts, dc(event_type) as distinct_event_types by src_ip
+| sort -attempts
+| head 10
+
+# --- 3. Privilege escalation activity ---
+index=siem sourcetype=siem:alert rule_name=privilege_escalation
+| table _time, username, host, description, risk_score
+| sort -_time
+
+# --- 4. Off-hours logins (outside 06:00-22:00) ---
+index=siem event_type=login_success
+| eval hour=strftime(_time, "%H")
+| where hour < 6 OR hour >= 22
+| table _time, username, src_ip, host
+
+# --- 5. Alerts by severity over time (for a timechart panel) ---
+index=siem sourcetype=siem:alert
+| timechart span=1h count by severity
+
+# --- 6. Suspicious IP matches against threat intel (bundled feed) ---
+index=siem sourcetype=siem:alert rule_name=suspicious_ip_threat_intel
+| table _time, src_ip, username, description, risk_score
+| sort -risk_score
+
+# --- 7. Risk score leaderboard by user ---
+index=siem sourcetype=siem:alert
+| stats sum(risk_score) as total_risk, count as alert_count by username
+| sort -total_risk
+
+# --- 8. Impossible travel detections ---
+index=siem sourcetype=siem:alert rule_name=impossible_travel
+| table _time, username, description, risk_score
+
+# --- 9. Web tier attack surface: suspicious paths & auth failures ---
+index=siem sourcetype=siem:web_server (event_type=http_suspicious_request OR event_type=http_auth_failure)
+| stats count by src_ip, event_type
+| sort -count
+
+# --- 10. Correlation: same source IP appearing across 2+ log sources (multi-vector) ---
+index=siem
+| stats dc(source_type) as source_count, values(source_type) as sources by src_ip
+| where source_count >= 2
+| sort -source_count

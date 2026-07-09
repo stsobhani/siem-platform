@@ -1,0 +1,32 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+env/
+.env
+*.egg-info/
+.DS_Store
+.idea/
+.vscode/
+
+# Ignore all log files by default, except the committed synthetic sample logs
+*.log
+!data/sample_logs/*.log
+
+# Streamlit: config.toml is committed on purpose (UI settings), secrets never are
+.streamlit/secrets.toml
+
+# Local database files / dumps, never committed
+*.db
+*.sqlite3
+*.sql.gz
+pgdata/
+postgres_data/
+*.dump
+
+# Credentials of any kind
+credentials
+credentials.*
+*.pem
+*.key

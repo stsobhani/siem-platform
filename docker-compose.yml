@@ -1,0 +1,115 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: siem-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: siem
+      POSTGRES_USER: siem_user
+      POSTGRES_PASSWORD: siem_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - siem_pg_data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U siem_user -d siem"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # Generates sample logs, then ingests + normalizes them into Postgres, then exits.
+  ingestion:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: siem-ingestion
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PG_HOST: postgres
+      PG_PORT: 5432
+      PG_DB: siem
+      PG_USER: siem_user
+      PG_PASSWORD: siem_password
+    command: >
+      sh -c "python scripts/generate_sample_logs.py &&
+             python -m siem.ingestion.pipeline --all --init-db"
+
+  # Runs the detection rule engine once ingestion has completed, then exits.
+  detection:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: siem-detection
+    depends_on:
+      - ingestion
+    environment:
+      PG_HOST: postgres
+      PG_PORT: 5432
+      PG_DB: siem
+      PG_USER: siem_user
+      PG_PASSWORD: siem_password
+    command: ["python", "-m", "siem.detection.run"]
+
+  # Runs the ML anomaly detection pipeline once ingestion has completed, then exits.
+  ml:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: siem-ml
+    depends_on:
+      - ingestion
+    environment:
+      PG_HOST: postgres
+      PG_PORT: 5432
+      PG_DB: siem
+      PG_USER: siem_user
+      PG_PASSWORD: siem_password
+    command: ["python", "-m", "siem.ml.run"]
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    container_name: siem-dashboard
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PG_HOST: postgres
+      PG_PORT: 5432
+      PG_DB: siem
+      PG_USER: siem_user
+      PG_PASSWORD: siem_password
+    ports:
+      - "8501:8501"
+
+  # Optional: a real local Splunk instance for HEC ingestion + the bundled
+  # dashboard/searches. Heavier image (~1.5GB) and not required to demo the
+  # rest of the stack, so it's kept behind a profile:
+  #   docker compose --profile splunk up
+  splunk:
+    image: splunk/splunk:latest
+    container_name: siem-splunk
+    profiles: ["splunk"]
+    restart: unless-stopped
+    environment:
+      SPLUNK_START_ARGS: --accept-license
+      SPLUNK_PASSWORD: ChangeMe123!
+      SPLUNK_HEC_TOKEN: 00000000-0000-0000-0000-000000000000
+    ports:
+      - "8000:8000"     # Splunk Web
+      - "8088:8088"     # HTTP Event Collector (HEC)
+      - "8089:8089"     # Management port
+    volumes:
+      - siem_splunk_data:/opt/splunk/var
+      - ./splunk/dashboards:/opt/splunk/etc/apps/search/local/data/ui/views
+
+volumes:
+  siem_pg_data:
+  siem_splunk_data:

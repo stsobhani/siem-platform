@@ -1,0 +1,121 @@
+<form version="1.1" theme="dark">
+  <label>SIEM Platform - SOC Overview</label>
+  <description>Enterprise SIEM portfolio project - alert trends, top attackers, and risk scoring. Import via Splunk Web: Settings -&gt; User Interface -&gt; Views -&gt; New View -&gt; source.</description>
+
+  <fieldset submitButtonLabel="Apply" autoRun="true">
+    <input type="time" token="time_tok">
+      <label>Time Range</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+
+  <row>
+    <panel>
+      <single>
+        <title>Total Alerts</title>
+        <search>
+          <query>index=siem sourcetype=siem:alert | stats count</query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="colorBy">value</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Critical Alerts</title>
+        <search>
+          <query>index=siem sourcetype=siem:alert severity=critical | stats count</query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="rangeColors">["0x53a051","0xdc4e41"]</option>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Distinct Attacking IPs</title>
+        <search>
+          <query>index=siem sourcetype=siem:alert | stats dc(src_ip) as c | fields c</query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+      </single>
+    </panel>
+    <panel>
+      <single>
+        <title>Avg Risk Score</title>
+        <search>
+          <query>index=siem sourcetype=siem:alert | stats avg(risk_score) as avg_risk | eval avg_risk=round(avg_risk,1)</query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+      </single>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <chart>
+        <title>Alerts Over Time by Severity</title>
+        <search>
+          <query>index=siem sourcetype=siem:alert | timechart span=1h count by severity</query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.stackMode">stacked</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>Alerts by Detection Rule</title>
+        <search>
+          <query>index=siem sourcetype=siem:alert | stats count by rule_name | sort -count</query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+      </chart>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <table>
+        <title>Top Attacking IP Addresses</title>
+        <search>
+          <query>index=siem sourcetype=siem:alert | stats count as alerts, max(risk_score) as max_risk by src_ip | sort -alerts | head 10</query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+      </table>
+    </panel>
+    <panel>
+      <table>
+        <title>Risk Score by User</title>
+        <search>
+          <query>index=siem sourcetype=siem:alert | stats sum(risk_score) as total_risk, count as alert_count by username | sort -total_risk</query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+      </table>
+    </panel>
+  </row>
+
+  <row>
+    <panel>
+      <table>
+        <title>Recent Alerts</title>
+        <search>
+          <query>index=siem sourcetype=siem:alert | table _time, rule_name, severity, username, src_ip, title, risk_score | sort -_time | head 50</query>
+          <earliest>$time_tok.earliest$</earliest>
+          <latest>$time_tok.latest$</latest>
+        </search>
+      </table>
+    </panel>
+  </row>
+</form>

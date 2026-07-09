@@ -1,0 +1,7 @@
+ip,category,confidence,source
+203.0.113.55,brute_force_source,92,sample_feed
+203.0.113.77,brute_force_source,88,sample_feed
+198.51.100.23,malware_c2,95,sample_feed
+185.220.101.13,tor_exit_node,80,sample_feed
+45.155.204.9,scanning_activity,75,sample_feed
+103.21.244.101,credential_stuffing,85,sample_feed
