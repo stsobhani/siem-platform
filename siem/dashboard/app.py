@@ -63,7 +63,7 @@ ml_df = load_ml_scores()
 # Sidebar filters
 # ---------------------------------------------------------------------------
 st.sidebar.title("SIEM Platform")
-st.sidebar.caption("Enterprise style SOC dashboard, portfolio build")
+st.sidebar.caption("Enterprise style SOC dashboard")
 
 severity_filter = st.sidebar.multiselect(
     "Severity", options=["low", "medium", "high", "critical"],
@@ -80,13 +80,13 @@ if st.sidebar.button("Refresh data"):
 
 st.sidebar.markdown("---")
 st.sidebar.markdown(
-    "**Data sources:** Windows auth, Linux SSH, Firewall, Web server\n\n"
-    "**Detection:** 6 rule-based detections plus Isolation Forest ML anomaly scoring\n\n"
-    "**Stack:** PostgreSQL, Python, pandas, scikit-learn, Streamlit, Splunk HEC"
+    "**Log Sources:** Windows authentication, Linux SSH, firewall, and web server events\n\n"
+    "**Detection Engine:** Rule-based threat detection with ML-powered anomaly scoring using Isolation Forest\n\n"
+    "**Capabilities:** Real-time event ingestion, alert generation, threat intelligence matching, and security monitoring\n\n"
+    "**Technology Stack:** Python, PostgreSQL, pandas, scikit-learn, Streamlit, Splunk HEC"
 )
 
-st.sidebar.markdown("---")
-st.sidebar.link_button("Deploy on Streamlit Community Cloud", "https://share.streamlit.io")
+
 
 filtered_alerts = alerts_df[
     alerts_df["severity"].isin(severity_filter) & alerts_df["rule_name"].isin(rule_filter)
@@ -199,7 +199,7 @@ with c5:
         st.info("No user-attributed alerts.")
 
 with c6:
-    st.markdown("**Login activity heatmap** (hour of day vs. day)")
+    st.markdown("**Login activity heatmap** (hour of day versus day)")
     logins = events_df[events_df["event_type"] == "login_success"].copy() if not events_df.empty else pd.DataFrame()
     if not logins.empty:
         logins["hour"] = logins["event_time"].dt.hour
@@ -222,10 +222,10 @@ if not ml_df.empty:
         st.metric("Logins Scored", f"{len(ml_df):,}")
         st.metric("Flagged Anomalous", f"{int(ml_df['is_anomaly'].sum()):,}")
         st.caption(
-            "Model scores every login on hour-of-day, day-of-week, new-source-IP, "
-            "recent failed attempts, and 24h login velocity -- flagging behavior "
-            "that doesn't resemble the rest of the population, without needing "
-            "any labeled attack data."
+            "Model scores every login on hour of day, day of week, whether the source IP "
+            "is new for that user, recent failed attempts, and 24 hour login velocity. It flags "
+            "behavior that does not resemble the rest of the population, without needing any "
+            "labeled attack data."
         )
     with c8:
         fig = px.scatter(

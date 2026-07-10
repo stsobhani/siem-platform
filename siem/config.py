@@ -12,12 +12,16 @@ class Config:
     PG_DB = os.getenv("PG_DB", "siem")
     PG_USER = os.getenv("PG_USER", "siem_user")
     PG_PASSWORD = os.getenv("PG_PASSWORD", "siem_password")
+    # "prefer" works against both a local Postgres (no SSL configured) and
+    # hosted providers like Neon/Supabase (SSL required). Override to
+    # "require" explicitly if needed.
+    PG_SSLMODE = os.getenv("PG_SSLMODE", "prefer")
 
     @property
     def sqlalchemy_uri(self) -> str:
         return (
             f"postgresql+psycopg2://{self.PG_USER}:{self.PG_PASSWORD}"
-            f"@{self.PG_HOST}:{self.PG_PORT}/{self.PG_DB}"
+            f"@{self.PG_HOST}:{self.PG_PORT}/{self.PG_DB}?sslmode={self.PG_SSLMODE}"
         )
 
     # --- Detection thresholds (tunable without touching rule code) ---

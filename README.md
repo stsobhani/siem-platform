@@ -1,6 +1,6 @@
 # SIEM Platform: Enterprise Style Security Information & Event Management
 
-[![Tests](https://github.com/YOUR-USERNAME/siem-platform/actions/workflows/tests.yml/badge.svg)](https://github.com/YOUR-USERNAME/siem-platform/actions/workflows/tests.yml)
+[![Tests](https://github.com/stsobhani/siem-platform/actions/workflows/tests.yml/badge.svg)](https://github.com/stsobhani/siem-platform/actions/workflows/tests.yml)
 
 A full-stack, portfolio-grade SIEM built from scratch in Python: it ingests logs from four
 different sources, normalizes them into a common schema, runs six rule-based detections plus
@@ -182,7 +182,7 @@ GRANT ALL PRIVILEGES ON DATABASE siem TO siem_user;
 ## Quick start (Docker, if available)
 
 ```bash
-git clone https://github.com/<your-username>/siem-platform.git
+git clone https://github.com/stsobhani/siem-platform.git
 cd siem-platform
 docker compose up --build
 ```
