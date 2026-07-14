@@ -11,81 +11,10 @@ Built to demonstrate hands-on skills for **SOC Analyst**, **Security Analyst**, 
 **Security Engineer** roles: log parsing/normalization, detection engineering, threat
 intelligence correlation, anomaly detection, and SIEM tooling (custom-built *and* Splunk).
 
-> **Background:** built after 2 years in an IT internship (Tier 1 helpdesk, VM
-> administration, datacenter operations) as a bridge project into cybersecurity, combining that
-> sysadmin foundation with Python and data analysis skills.
-
-> **Data notice:** this project uses synthetic security logs generated for demonstration and
-> testing purposes ([`scripts/generate_sample_logs.py`](scripts/generate_sample_logs.py)). The
-> logs simulate Windows, Linux, firewall, and web activity patterns, including deliberately
-> embedded attack scenarios, and are not collected from any real system or user.
-
-## Architecture
-
-```mermaid
-flowchart LR
-    subgraph Sources["Log Sources"]
-        A1[Windows Security<br/>Event Log]
-        A2[Linux SSH / sudo<br/>auth.log]
-        A3[Firewall<br/>pfSense-style CSV]
-        A4[Web Server<br/>Apache/nginx combined]
-    end
-
-    subgraph Pipeline["Python Ingestion Pipeline"]
-        B1[Parsers<br/>per source type]
-        B2[Normalization<br/>common event schema]
-    end
-
-    subgraph Storage["PostgreSQL"]
-        C1[(raw_logs)]
-        C2[(normalized_events)]
-        C3[(alerts)]
-        C4[(threat_intel_ips)]
-        C5[(ml_anomaly_scores)]
-    end
-
-    subgraph Detection["Detection & ML"]
-        D1[Rule Engine<br/>6 detection rules]
-        D2[Isolation Forest<br/>anomaly scoring]
-    end
-
-    subgraph Presentation["Presentation Layer"]
-        E1[Streamlit<br/>SOC Dashboard]
-        E2[Splunk<br/>HEC + SPL + Dashboard]
-    end
-
-    A1 & A2 & A3 & A4 --> B1 --> B2
-    B2 --> C1
-    B2 --> C2
-    C2 --> D1
-    C4 --> D1
-    D1 --> C3
-    C2 --> D2
-    D2 --> C5
-    C2 & C3 & C5 --> E1
-    C2 & C3 --> E2
-```
 
 **Data flow:** raw log line → source-specific parser → normalized event (timestamp, username,
 src/dst IP, event type, severity) → PostgreSQL → detection rules + ML scoring → alerts →
 Streamlit dashboard *and* Splunk (via HTTP Event Collector).
-
-See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the full schema and per-component design notes.
-
-## Screenshots
-
-Add screenshots of your own dashboard here once you have it running (Win+Shift+S on Windows to
-capture a region, save into `docs/screenshots/`, then reference them below):
-
-```markdown
-![Dashboard overview](docs/screenshots/dashboard_overview.png)
-![Alert detail view](docs/screenshots/alerts_table.png)
-![Splunk dashboard](docs/screenshots/splunk_overview.png)
-```
-
-Good shots to capture: the KPI header with live alert counts, the alert trend and top-attacking-IP
-charts, the ML anomaly scatter plot, and (if you set up Splunk) the imported Splunk dashboard
-running an SPL query.
 
 ## Features
 
@@ -153,7 +82,6 @@ count only grows when genuinely new evidence appears, not on every pass over old
 - `docker-compose.yml` spins up Postgres, the ingestion/detection/ML pipeline, the dashboard,
   and (optionally) a local Splunk instance, for anyone who does have Docker available.
 - 31 unit tests (`pytest`) covering every parser, every detection rule, and the ML pipeline.
-- Architecture diagram, ERD, and design rationale in [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 ## Quick start (Windows, no Docker)
 
@@ -218,13 +146,12 @@ detection and ML runs.
 Splunk offers a free trial of Splunk Enterprise that installs directly on Windows:
 
 1. Download the Windows installer from
-   [splunk.com/download](https://www.splunk.com/en_us/download/splunk-enterprise.html) (free
-   trial, no credit card required for the 60 day trial).
+   [splunk.com/download](https://www.splunk.com/en_us/download/splunk-enterprise.html)
 2. Run the installer, set an admin password when prompted, and keep the default port (8000).
 3. Once installed, Splunk Web opens at `http://localhost:8000`. Log in with the admin account
    you created.
 4. Enable the HTTP Event Collector: Settings, then Data Inputs, then HTTP Event Collector, then
-   New Token. Name it (for example `siem-token`), keep the default source type, and create a
+   New Token. Name it `siem-token`, keep the default source type, and create a
    new index called `siem` when prompted. Copy the token value shown at the end.
 5. Back in PowerShell, with your virtual environment active:
    ```powershell
@@ -250,11 +177,10 @@ To share this as a link rather than something that only runs on your machine, yo
 database reachable from the internet (your PC's Postgres instance is not) plus somewhere to
 host the Streamlit app. Both of the following have free tiers:
 
-1. **Hosted PostgreSQL.** Create a free database on [Neon](https://neon.tech) or
-   [Supabase](https://supabase.com). Either gives you a connection string; note the host, port,
+1. **Hosted PostgreSQL.** Create a free database on [Neon](https://neon.tech). This gives you a connection string; note the host, port,
    database name, username, and password from it.
 2. **Push the code to GitHub.** Commit everything except `.env` and anything else listed in
-   `.gitignore` (secrets should never be committed).
+   `.gitignore`.
 3. **Deploy on Streamlit Community Cloud.** Go to
    [share.streamlit.io](https://share.streamlit.io), sign in with GitHub, choose this repo, and
    set the main file path to `siem/dashboard/app.py`.
@@ -281,13 +207,7 @@ host the Streamlit app. Both of the following have free tiers:
    python -m siem.detection.run
    python -m siem.ml.run
    ```
-6. Your app will be live at a `share.streamlit.io` URL you can put directly on your resume and
-   LinkedIn. A sidebar button in the dashboard links to Streamlit Community Cloud if you want to
-   start this process from there.
-
-Note that the free tiers of Neon and Supabase pause the database after a period of inactivity,
-so the very first load after a pause can take a few seconds. Running the live simulator against
-the hosted database periodically (or on a schedule) keeps it populated with fresh data.
+6. Your app will be live at a `https://stsobhani-siem-platform-siemdashboardapp-avehhr.streamlit.app/`.
 
 ## Running the tests
 
@@ -342,10 +262,9 @@ siem-platform/
 ├── .streamlit/config.toml
 ├── docker-compose.yml
 ├── Dockerfile / Dockerfile.dashboard
-└── ARCHITECTURE.md
 ```
 
-## Notes on realism / what's simulated
+## Notes on realism / what is simulated
 
 This is a portfolio project, built to run anywhere with zero external API keys or paid
 services, so a couple of pieces are intentionally simplified with a clear upgrade path noted
@@ -363,15 +282,3 @@ in the code:
   (Windows Security Event fields, actual `auth.log` syslog grammar, pfSense CSV export, Apache
   combined log format) and will parse real logs in those formats unmodified.
 
-## Resume bullet ideas
-
-- *Designed and built a full-stack SIEM platform in Python/PostgreSQL that ingests and
-  normalizes logs from 4 heterogeneous sources (Windows, Linux, firewall, web) and detects 6
-  classes of attack (brute force, impossible travel, privilege escalation, threat-intel
-  matches, off-hours access, credential stuffing).*
-- *Implemented unsupervised anomaly detection (Isolation Forest, scikit-learn) over login
-  behavior features, surfacing anomalous access patterns without labeled attack data.*
-- *Built a live SOC analyst dashboard (Streamlit/Plotly) and integrated with Splunk (HEC, SPL,
-  custom dashboards) for enterprise-grade search and visualization.*
-- *Containerized the full pipeline (Docker/docker-compose) and wrote 31 unit tests covering
-  parsing, detection logic, and the ML pipeline.*
