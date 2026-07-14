@@ -1,6 +1,6 @@
 <form version="1.1" theme="dark">
-  <label>SIEM Platform - SOC Overview</label>
-  <description>Enterprise SIEM portfolio project - alert trends, top attackers, and risk scoring. Import via Splunk Web: Settings -&gt; User Interface -&gt; Views -&gt; New View -&gt; source.</description>
+  <label>SIEM Platform</label>
+  <description>Enterprise SIEM portfolio project with alert trends, top attackers, and risk scoring.</description>
 
   <fieldset submitButtonLabel="Apply" autoRun="true">
     <input type="time" token="time_tok">
