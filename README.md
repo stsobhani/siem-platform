@@ -7,8 +7,7 @@ different sources, normalizes them into a common schema, runs six rule-based det
 an unsupervised ML anomaly model, visualizes everything on a live SOC dashboard, and forwards
 the same data to **Splunk** for enterprise-grade search and dashboarding.
 
-Built to demonstrate hands-on skills for **SOC Analyst**, **Security Analyst**, and
-**Security Engineer** roles: log parsing/normalization, detection engineering, threat
+Built to demonstrate hands-on skills for security analysis through log parsing/normalization, detection engineering, threat
 intelligence correlation, anomaly detection, and SIEM tooling (custom-built *and* Splunk).
 
 
@@ -45,7 +44,7 @@ Five tables: `raw_logs` (audit trail), `normalized_events`, `alerts`, `threat_in
 | **Unusual login hours** | Successful logins outside a configurable business-hours window |
 | **Multiple failed auth attempts** | ≥10 failed auth events for one user across *any* source within 60 minutes (catches slow/low, cross-vector credential stuffing that per-source brute-force detection would miss) |
 
-Implemented in [`siem/detection/rules.py`](siem/detection/rules.py); every rule is unit tested
+Implemented in [`siem/detection/rules.py`](siem/detection/rules.py), every rule is unit tested
 in isolation against synthetic data (no DB required) in
 [`tests/test_detection_rules.py`](tests/test_detection_rules.py).
 
@@ -177,7 +176,7 @@ To share this as a link rather than something that only runs on your machine, yo
 database reachable from the internet (your PC's Postgres instance is not) plus somewhere to
 host the Streamlit app. Both of the following have free tiers:
 
-1. **Hosted PostgreSQL.** Create a free database on [Neon](https://neon.tech). This gives you a connection string; note the host, port,
+1. **Hosted PostgreSQL.** Create a free database on [Neon](https://neon.tech). This gives you a connection string, note the host, port,
    database name, username, and password from it.
 2. **Push the code to GitHub.** Commit everything except `.env` and anything else listed in
    `.gitignore`.
@@ -222,7 +221,7 @@ not just written and assumed to work. Current status:
 
 | Check | Status | How it is verified |
 |---|---|---|
-| Unit tests (31 total: parsers, detection rules, ML pipeline) | Passing | Runs automatically on every push via the GitHub Actions workflow above; run locally with `pytest tests/ -v` |
+| Unit tests (31 total: parsers, detection rules, ML pipeline) | Passing | Runs automatically on every push via the GitHub Actions workflow above. Run locally with `pytest tests/ -v` |
 | Log parsing | 190/190 sample log lines normalized successfully | `python -m siem.ingestion.pipeline --all --init-db`, check the reported normalized count against total lines |
 | Detection engine | All 6 rules fire correctly against the embedded attack scenarios | `python -m siem.detection.run`, then inspect the `alerts` table |
 | ML anomaly detection | Correctly flags the synthetic impossible-travel and off-hours logins as top anomalies with no labeled training data | `python -m siem.ml.run`, then inspect `ml_anomaly_scores` |
