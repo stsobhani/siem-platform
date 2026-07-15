@@ -26,7 +26,7 @@ from sqlalchemy import text
 from siem.config import config
 from siem.db.session import get_engine
 
-st.set_page_config(page_title="SIEM SOC Dashboard", layout="wide")
+st.set_page_config(page_title="SIEM Dashboard", layout="wide")
 
 engine = get_engine()
 
@@ -63,7 +63,6 @@ ml_df = load_ml_scores()
 # Sidebar filters
 # ---------------------------------------------------------------------------
 st.sidebar.title("SIEM Platform")
-st.sidebar.caption("Enterprise style SOC dashboard")
 
 severity_filter = st.sidebar.multiselect(
     "Severity", options=["low", "medium", "high", "critical"],
@@ -80,10 +79,10 @@ if st.sidebar.button("Refresh data"):
 
 st.sidebar.markdown("---")
 st.sidebar.markdown(
-    "**Log Sources:** Windows authentication, Linux SSH, firewall, and web server events\n\n"
-    "**Detection Engine:** Rule-based threat detection with ML-powered anomaly scoring using Isolation Forest\n\n"
-    "**Capabilities:** Real-time event ingestion, alert generation, threat intelligence matching, and security monitoring\n\n"
-    "**Technology Stack:** Python, PostgreSQL, pandas, scikit-learn, Streamlit, Splunk HEC"
+    "**Log Sources:** Windows authentication, Linux SSH, firewall, and web server events.\n\n"
+    "**Detection Engine:** Rule-based threat detection with ML-powered anomaly scoring using Isolation Forest.\n\n"
+    "**Capabilities:** Real-time event ingestion, alert generation, threat intelligence matching, and security monitoring.\n\n"
+    "**Technology Stack:** Python, PostgreSQL, pandas, scikit-learn, Streamlit, Splunk HEC."
 )
 
 

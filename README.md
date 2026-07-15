@@ -206,7 +206,7 @@ host the Streamlit app. Both of the following have free tiers:
    python -m siem.detection.run
    python -m siem.ml.run
    ```
-6. Your app will be live at a `https://stsobhani-siem-platform-siemdashboardapp-avehhr.streamlit.app/`.
+6. My live website can be accessed here: `https://stsobhani-siem-platform-siemdashboardapp-avehhr.streamlit.app/`.
 
 ## Running the tests
 
