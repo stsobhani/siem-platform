@@ -15,7 +15,7 @@ intelligence correlation, anomaly detection, and SIEM tooling (custom-built *and
 src/dst IP, event type, severity) → PostgreSQL → detection rules + ML scoring → alerts →
 Streamlit dashboard *and* Splunk (via HTTP Event Collector).
 
-My live website can be accessed here: `https://stsobhani-siem-platform-siemdashboardapp-avehhr.streamlit.app/`.
+[Visit Live Platform Website Here](https://stsobhani-siem-platform-siemdashboardapp-avehhr.streamlit.app)
 
 ## Features
 
