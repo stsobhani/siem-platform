@@ -17,6 +17,13 @@ Streamlit dashboard *and* Splunk (via HTTP Event Collector).
 
 [Visit Live Platform Website Here](https://stsobhani-siem-platform-siemdashboardapp-avehhr.streamlit.app)
 
+
+## Project Demo
+
+Watch the full SIEM platform walkthrough:
+
+[![SIEM Platform Demonstration](https://img.youtube.com/vi/VB7tXlp7LCU/0.jpg)](https://youtu.be/VB7tXlp7LCU)
+
 ## Features
 
 ### 1. Multi-source log ingestion
