@@ -20,9 +20,12 @@ Streamlit dashboard *and* Splunk (via HTTP Event Collector).
 
 ## Project Demo
 
-Watch the full SIEM platform walkthrough:
+Watch the full SIEM platform walkthrough below on YouTube:
 
 [![SIEM Platform Demonstration](https://img.youtube.com/vi/VB7tXlp7LCU/0.jpg)](https://youtu.be/VB7tXlp7LCU)
+
+[
+SIEM Platform Demonstration | Splunk, Streamlit & Machine Learning Security Monitoring](https://stsobhani-siem-platform-siemdashboardapp-avehhr.streamlit.app)
 
 ## Features
 
